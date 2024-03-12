@@ -1,0 +1,11 @@
+ident=*
+data_dir=/data/mirrors
+downloader_dir=downloaders
+include log4j.cf
+include apache-chainsaw.cf
+include elasticsearch.cf
+include jackson-databind.cf
+include geotools.cf
+include apache-commons-compress.cf
+include guava.cf
+include gson.cf

@@ -1,0 +1,8 @@
+ident=apache-commons-compress
+enable=true
+repo=apache-commons-compress
+downloader=maven-downloader
+archive=json/commons-compress
+args=https://repo1.maven.org/maven2/org/apache/commons/commons-compress/ commons-compress-
+
+

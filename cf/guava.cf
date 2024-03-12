@@ -1,0 +1,8 @@
+ident=guava
+repo=guava
+enable=true
+downloader=maven-downloader
+archive=json/guava
+args=https://repo1.maven.org/maven2/com/google/guava/guava/ guava-
+
+

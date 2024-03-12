@@ -1,0 +1,58 @@
+#!/bin/sh
+
+#
+# This code is part of the Jaudit utilty.
+#
+# (C) Copyright IBM 2023.
+#
+# This code is licensed under the Apache License, Version 2.0. You may
+# obtain a copy of this license in the LICENSE.txt file in the root directory
+# of this source tree or at http://www.apache.org/licenses/LICENSE-2.0.
+#
+# Any modifications or derivative works of this code must retain this
+# copyright notice, and modified files need to carry a notice indicating
+# that they have been altered from the originals.
+#
+
+
+DIR="`dirname $0`"
+
+REPO="$1"
+SITE="$2"
+ARCHIVE="$3"
+ACCEPT="$4"
+REGEX="$5"
+SKIP="$6"
+
+JAUDIT_AUTO_DIR="`realpath \"$DIR/..\"`"
+JAUDIT_DIR="`realpath \"$JAUDIT_AUTO_DIR/..\"`"
+
+"$JAUDIT_DIR"/bin/run submodules check_installed data || exit 1
+
+[ ! -d "$REPO"/jars ] && mkdir -p "$REPO"/jars
+
+(cd "$REPO"/mirror && wget -q -r -A "$ACCEPT" -L -X '^\.*' --follow-tags=a,href -nc "$SITE")
+
+find $REPO -name "$ACCEPT" |
+while read tarfile
+do
+   tar ztf "$tarfile" | egrep "$REGEX"'\.jar$' | egrep -v "$SKIP" |
+   while read jarFile
+   do
+       jf=`basename $jarFile`
+       if [ ! -f "$REPO/jars/$jf" ]; then
+          tar zOxf "$tarfile" "$jarFile" > "$REPO/jars/$jf"
+	  if [ -s "$REPO/jars/$jf" ]; then
+             echo "$REPO/jars/$jf"
+	  else
+	     rm -f "$REPO/jars/$jf"
+	  fi
+       fi
+   done
+done |
+while read jar_name
+do
+   "$JAUDIT_DIR"/bin/run add-jars -a "$ARCHIVE" "$jar_name"
+done
+
+

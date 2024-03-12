@@ -1,0 +1,8 @@
+ident=jackson-databind
+repo=jackson-databind
+enable=true
+downloader=maven-downloader
+archive=json/jackson-databind
+args=https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/ jackson-databind-
+
+

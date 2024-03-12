@@ -1,0 +1,8 @@
+ident=gson
+repo=gson
+enable=true
+downloader=maven-downloader
+archive=json/gson
+args=https://repo1.maven.org/maven2/com/google/code/gson/gson/ gson-
+
+

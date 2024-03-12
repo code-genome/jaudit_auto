@@ -1,0 +1,7 @@
+ident=chainsaw
+enable=true
+repo=chainsaw
+downloader=apache-downloader
+archive=json/log4j
+args=https://archive.apache.org/dist/logging/chainsaw/ apache-chainsaw*-bin.tar.gz /apache-chainsaw-.* (sources|javadoc|tests|osgi)
+

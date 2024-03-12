@@ -1,0 +1,6 @@
+ident=log4j
+repo=log4j
+enable=true
+downloader=apache-downloader
+archive=json/log4j
+args=https://archive.apache.org/dist/logging/log4j/ apache-log4j*-bin.tar.gz /log4j-core.* (sources|javadoc|tests|osgi)

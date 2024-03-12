@@ -1,0 +1,54 @@
+#!/bin/sh
+
+#
+# This code is part of the Jaudit utilty.
+#
+# (C) Copyright IBM 2023.
+#
+# This code is licensed under the Apache License, Version 2.0. You may
+# obtain a copy of this license in the LICENSE.txt file in the root directory
+# of this source tree or at http://www.apache.org/licenses/LICENSE-2.0.
+#
+# Any modifications or derivative works of this code must retain this
+# copyright notice, and modified files need to carry a notice indicating
+# that they have been altered from the originals.
+#
+
+
+DIR="`dirname $0`"
+
+REPO="$1"
+SITE="$2"
+ARCHIVE="$3"
+PREFIX="$4"
+
+JAUDIT_AUTO_DIR="`realpath \"$DIR/..\"`"
+JAUDIT_DIR="`realpath \"$JAUDIT_AUTO_DIR/..\"`"
+
+"$JAUDIT_DIR"/bin/run submodules check_installed data || exit 1
+
+NOW=`date +%s`
+
+USERAGENT="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36"
+
+[ ! -d "$REPO"/jars ] && mkdir -p "$REPO"/jars
+
+wget -q -O - "$SITE"maven-metadata.xml |
+sed -ne 's/^[	 ]*<version>\([^<]*\)<\/version>.*$/\1/p' \
+     -e '/^[	 ]*$/d' |
+while read v
+do
+  jar="$PREFIX""$v"".jar"
+  fn="$REPO"/jars/"$jar"
+  if [ ! -f "$fn" ]; then
+    wget -q -O "$fn" "$SITE""$v"/"$jar" 1>&2
+    if [ -f "$fn" ]; then
+       echo "$fn"
+    fi
+    sleep 30
+  fi
+done |
+while read jar_name
+do
+   "$JAUDIT_DIR"/bin/run add-jars -a "$ARCHIVE" "$jar_name"
+done

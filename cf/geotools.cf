@@ -1,0 +1,6 @@
+ident=geotools
+repo=geotools
+enable=true
+downloader=maven-downloader
+archive=json/geotools
+args=https://repo.osgeo.org/repository/geotools-releases/org/geotools/gt-main/ gt-main-
